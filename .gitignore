@@ -1,0 +1,7 @@
+node_modules
+dist
+app/bower_components
+.git
+.idea
+
+
