@@ -8,6 +8,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
   googleOAuthContacts.onload();
 });
 
+
 var googleOAuthContacts = function () {
 
   var STATE_START = 1;
