@@ -198,8 +198,9 @@ var googleOAuthContacts = function () {
 
   return {
     onload: function onload() {
-      interactiveSignIn();
-      getUserInfo(false);
+      interactiveSignIn().then(function () {
+        getUserInfo(false);
+      });
     }
   };
 }();
