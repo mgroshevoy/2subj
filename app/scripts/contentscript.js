@@ -20,6 +20,7 @@ document.body.addEventListener('contextmenu', function (event) {
 });
 
 function openPopup(event) {
+
   var subject = '';
   var $select, checked = 'checked';
   var subj = event.target.value.trim();

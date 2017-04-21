@@ -50,7 +50,7 @@ var googleOAuthContacts = function () {
     getToken();
 
     function getToken() {
-      chrome.identity.getAuthToken({ interactive: interactive }, function (token) {
+      chrome.identity.getAuthToken({interactive: interactive}, function (token) {
         if (chrome.runtime.lastError) {
           callback(chrome.runtime.lastError);
           return;
@@ -72,7 +72,7 @@ var googleOAuthContacts = function () {
     function requestComplete() {
       if (this.status == 401 && retry) {
         retry = false;
-        chrome.identity.removeCachedAuthToken({ token: access_token }, getToken);
+        chrome.identity.removeCachedAuthToken({token: access_token}, getToken);
       } else {
         callback(null, this.status, this.response);
       }
@@ -87,12 +87,13 @@ var googleOAuthContacts = function () {
     console.log(data);
     for (var i = 0, entry; entry = data.feed.entry[i]; i++) {
       if (entry['gd$email']) {
-          var emails = entry['gd$email'];
-          for (var j = 0, email; email = emails[j]; j++) {
-            contacts.push({
-              name:entry['title']['$t'],
-              email:email['address']});
-          }
+        var emails = entry['gd$email'];
+        for (var j = 0, email; email = emails[j]; j++) {
+          contacts.push({
+            name: entry['title']['$t'],
+            email: email['address']
+          });
+        }
       }
       // if (entry['gd$email']) {
       //   var contact = {
@@ -106,8 +107,8 @@ var googleOAuthContacts = function () {
       //   contacts.push(contact);
       // }
     }
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, contacts, function(response) {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, contacts, function (response) {
         //console.log(response);
       });
     });
@@ -115,9 +116,10 @@ var googleOAuthContacts = function () {
 
   function getUserInfo(interactive) {
     xhrWithAuth('GET',
-    // 'https://www.googleapis.com/plus/v1/people/me',
-    'https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=999', interactive, onContacts);
+      // 'https://www.googleapis.com/plus/v1/people/me',
+      'https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=999', interactive, onContacts);
   }
+
   // @corecode_end getProtectedData
 
 
@@ -157,7 +159,7 @@ var googleOAuthContacts = function () {
     // will be opened when the user is not yet authenticated or not.
     // @see http://developer.chrome.com/apps/app_identity.html
     // @see http://developer.chrome.com/apps/identity.html#method-getAuthToken
-    chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+    chrome.identity.getAuthToken({'interactive': true}, function (token) {
       if (chrome.runtime.lastError) {
         sampleSupport.log(chrome.runtime.lastError);
         changeState(STATE_START);
@@ -172,13 +174,14 @@ var googleOAuthContacts = function () {
   }
 
   function revokeToken() {
-    chrome.identity.getAuthToken({ 'interactive': false }, function (current_token) {
+    chrome.identity.getAuthToken({'interactive': false}, function (current_token) {
       if (!chrome.runtime.lastError) {
 
         // @corecode_begin removeAndRevokeAuthToken
         // @corecode_begin removeCachedAuthToken
         // Remove the local cached token
-        chrome.identity.removeCachedAuthToken({ token: current_token }, function () {});
+        chrome.identity.removeCachedAuthToken({token: current_token}, function () {
+        });
         // @corecode_end removeCachedAuthToken
 
         // Make a request to revoke token in the server
@@ -198,9 +201,8 @@ var googleOAuthContacts = function () {
 
   return {
     onload: function onload() {
-      interactiveSignIn().then(function () {
-        getUserInfo(false);
-      });
+      interactiveSignIn();
+      getUserInfo(false);
     }
   };
 }();
