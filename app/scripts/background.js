@@ -1,13 +1,14 @@
 'use strict';
 
-chrome.runtime.onMessage.addListener(function (response, sender, sendResponse) {
-  googleOAuthContacts.onload();
+chrome.webNavigation.onCompleted.addListener(function(details) {
+  chrome.runtime.onMessage.addListener(function (response, sender, sendResponse) {
+    googleOAuthContacts.onload();
+  });
 });
 
 chrome.runtime.onInstalled.addListener(function (details) {
   googleOAuthContacts.onload();
 });
-
 
 var googleOAuthContacts = function () {
 

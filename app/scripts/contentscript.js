@@ -9,15 +9,48 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 
 chrome.runtime.sendMessage('ReadyToRoll');
 
-document.body.addEventListener('contextmenu', function (event) {
-  if (event.ctrlKey || event.shiftKey) {
-    console.log(event);
-    if (event.target.tagName === 'INPUT') {
-      event.preventDefault();
+
+function insertAfter(elem, refElem) {
+  return refElem.parentNode.insertBefore(elem, refElem.nextSibling);
+}
+
+document.body.addEventListener('focusin', function (event) {
+  //var myHtml = '<div id="addRecipients" class="G-Ni T-I J-J5-Ji nu T-I-ax7 L3" style="margin-right: 0px" role="button" tabindex="1" data-tooltip="Отправить &#8234;(Ctrl&nbsp;+&nbsp;Enter)&#8236;" aria-label="Add recipients" data-tooltip-delay="800" style="user-select: none;">Add recipients</div>';
+  var myHtml = '<button id="addRecipients">Add recipients</button>';
+  var subjectButton;
+  if ((event.srcElement.name === 'subjectbox' || event.srcElement.getAttribute('class') === 'dm') && !document.getElementById('addRecipients')) {
+    event.srcElement.setAttribute('style', 'width:75%');
+    subjectButton = document.createElement('div');
+    subjectButton.setAttribute('id', 'divAddRecipients');
+    subjectButton.setAttribute('style', 'float:right');
+    subjectButton.innerHTML = myHtml;
+    insertAfter(subjectButton, event.srcElement);
+    subjectButton.addEventListener('click', function (e) {
+      e.preventDefault();
       openPopup(event);
-    }
+    });
   }
 });
+
+document.body.addEventListener('focusout', function (event) {
+  if (document.getElementById('divAddRecipients') && event.relatedTarget && event.relatedTarget.id !== 'addRecipients') {
+    if (document.getElementsByName('subjectbox')[0])
+      document.getElementsByName('subjectbox')[0].setAttribute('style', 'width:100%');
+    document.getElementById('divAddRecipients').parentNode.removeChild(document.getElementById('divAddRecipients'));
+  }
+  if (document.getElementsByClassName('dm')[3] && event.relatedTarget && event.relatedTarget.id !== 'addRecipients')
+    document.getElementsByClassName('dm')[3].setAttribute('style', 'width:100%');
+});
+
+// document.body.addEventListener('contextmenu', function (event) {
+//   if (event.ctrlKey || event.shiftKey) {
+//     console.log(event);
+//     if (event.target.tagName === 'INPUT') {
+//       event.preventDefault();
+//       openPopup(event);
+//     }
+//   }
+// });
 
 function openPopup(event) {
 
@@ -63,7 +96,7 @@ function openPopup(event) {
           subject += '#to ' + email;
         });
         if (!data.encrypt) subject = '#allow ' + subject;
-        if (data.subject.length > 0) {
+        if (data.subject && data.subject.length > 0) {
           subject = data.subject.trim().replace(/\s+/g, ' ')
             + ' ' + subject;
           // if(event.target.value.trim().search(subj) === 0) {
