@@ -1,10 +1,22 @@
 'use strict';
+var contacts = null;
+var timerId;
 
-chrome.webNavigation.onCompleted.addListener(function(details) {
-  chrome.runtime.onMessage.addListener(function (response, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (response, sender, sendResponse) {
+  if (!contacts) {
     googleOAuthContacts.onload();
-  });
+  } else {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, contacts, function (response) {
+        //console.log(response);
+      });
+    });
+  }
 });
+
+timerId = setInterval(function () {
+  googleOAuthContacts.onload();
+}, 3600000);
 
 chrome.runtime.onInstalled.addListener(function (details) {
   googleOAuthContacts.onload();
@@ -80,15 +92,18 @@ var googleOAuthContacts = function () {
     }
   }
 
-  var contacts = null;
 
   function onContacts(error, status, response) {
-    contacts = [];
     var data = JSON.parse(response);
     console.log(data);
+    if (!data) return;
+    contacts = [];
     for (var i = 0, entry; entry = data.feed.entry[i]; i++) {
       if (entry['gd$email']) {
         var emails = entry['gd$email'];
+        if (!entry['title']['$t']) {
+          entry['title']['$t'] = emails[0]['address'] || '<Unknown>';
+        }
         for (var j = 0, email; email = emails[j]; j++) {
           contacts.push({
             name: entry['title']['$t'],
@@ -102,9 +117,7 @@ var googleOAuthContacts = function () {
       //     'id': entry['id']['$t'],
       //     'emails': []
       //   };
-      //   if (!contact['name']) {
-      //     contact['name'] = contact['emails'][0] || '<Unknown>';
-      //   }
+
       //   contacts.push(contact);
       // }
     }
@@ -126,16 +139,16 @@ var googleOAuthContacts = function () {
 
   // Code updating the user interface, when the user information has been
   // fetched or displaying the error.
-  function onUserInfoFetched(error, status, response) {
-    if (!error && status == 200) {
-      changeState(STATE_AUTHTOKEN_ACQUIRED);
-      sampleSupport.log(response);
-      var user_info = JSON.parse(response);
-      populateUserInfo(user_info);
-    } else {
-      changeState(STATE_START);
-    }
-  }
+  // function onUserInfoFetched(error, status, response) {
+  //   if (!error && status == 200) {
+  //     changeState(STATE_AUTHTOKEN_ACQUIRED);
+  //     sampleSupport.log(response);
+  //     var user_info = JSON.parse(response);
+  //     populateUserInfo(user_info);
+  //   } else {
+  //     changeState(STATE_START);
+  //   }
+  // }
 
   // OnClick event handlers for the buttons.
 
@@ -174,30 +187,30 @@ var googleOAuthContacts = function () {
     // @corecode_end getAuthToken
   }
 
-  function revokeToken() {
-    chrome.identity.getAuthToken({'interactive': false}, function (current_token) {
-      if (!chrome.runtime.lastError) {
-
-        // @corecode_begin removeAndRevokeAuthToken
-        // @corecode_begin removeCachedAuthToken
-        // Remove the local cached token
-        chrome.identity.removeCachedAuthToken({token: current_token}, function () {
-        });
-        // @corecode_end removeCachedAuthToken
-
-        // Make a request to revoke token in the server
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://accounts.google.com/o/oauth2/revoke?token=' + current_token);
-        xhr.send();
-        // @corecode_end removeAndRevokeAuthToken
-
-        // Update the user interface accordingly
-        changeState(STATE_START);
-        // addToLogger('Token revoked and removed from cache. '+
-        //   'Check chrome://identity-internals to confirm.');
-      }
-    });
-  }
+  // function revokeToken() {
+  //   chrome.identity.getAuthToken({'interactive': false}, function (current_token) {
+  //     if (!chrome.runtime.lastError) {
+  //
+  //       // @corecode_begin removeAndRevokeAuthToken
+  //       // @corecode_begin removeCachedAuthToken
+  //       // Remove the local cached token
+  //       chrome.identity.removeCachedAuthToken({token: current_token}, function () {
+  //       });
+  //       // @corecode_end removeCachedAuthToken
+  //
+  //       // Make a request to revoke token in the server
+  //       var xhr = new XMLHttpRequest();
+  //       xhr.open('GET', 'https://accounts.google.com/o/oauth2/revoke?token=' + current_token);
+  //       xhr.send();
+  //       // @corecode_end removeAndRevokeAuthToken
+  //
+  //       // Update the user interface accordingly
+  //       changeState(STATE_START);
+  //       // addToLogger('Token revoked and removed from cache. '+
+  //       //   'Check chrome://identity-internals to confirm.');
+  //     }
+  //   });
+  // }
 
 
   return {
