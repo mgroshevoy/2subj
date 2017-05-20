@@ -1,0 +1,32 @@
+body {
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 1.1em;
+  background: rgb(240, 240, 240);
+  border-color: rgb(240, 240, 240);
+  margin-top: 0;
+}
+
+.securemail-label {
+  display: block;
+}
+
+.securemail-button {
+  background-color: #008CBA;
+  border: none;
+  color: white;
+  padding: 15px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 0.75em;
+  border-radius: 4px;
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+
+.securemail-input {
+  padding: 12px 5px;
+  font-size: 0.75em;
+  margin: 8px 0;
+  box-sizing: border-box;
+}

@@ -1,5 +1,5 @@
 {
-  "name": "2subj",
+  "name": "SecureMail from StayPrivate",
   "private": true,
   "engines": {
     "node": ">=0.8.0"

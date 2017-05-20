@@ -1,10 +1,14 @@
 {
   "appName": {
-    "message": "2subj",
+    "message": "SecureMail for Gmail",
     "description": "The name of the application"
   },
+  "shortAppName" : {
+    "message": "SecureMail",
+    "description": "Short name of the application"
+  },
   "appDescription": {
-    "message": "Recipients2Subject",
+    "message": "Add Secure Recipients to Subject Field",
     "description": "The description of the application"
   }
 }

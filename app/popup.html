@@ -1,25 +1,40 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <!-- build:css styles/popup-vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css styles/main.css -->
-    <link href="styles/main.css" rel="stylesheet">
-    <!-- endbuild -->
-  </head>
-  <body>
-    <h1>2subj</h1>
+<head>
+  <meta charset="utf-8">
+  <!-- build:css styles/popup-vendor.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css styles/main.css -->
 
-    <!-- build:js scripts/popup-vendor.js -->
-    <!-- bower:js -->
-    <!-- endbower -->
-    <!-- endbuild -->
+  <link href="styles/popup.css" rel="stylesheet">
 
-    <!-- build:js scripts/popup.js -->
-    <script src="scripts/popup.js"></script>
-    <!-- endbuild -->
-  </body>
+  <!-- endbuild -->
+</head>
+<body>
+
+<img style="margin-right: 5px; display: inline-block; margin-top: 0;" src="images/icon-38.png">
+<h3 style="display: inline-block; vertical-align:50%;">SecureMail</h3>
+
+<label class="securemail-label">
+  Secure email address:
+</label>
+<input class="securemail-input" type="text" name="addressTo" id="addressTo" placeholder="Please enter an address">
+
+
+<div id="status" style="font-size: 0.75em">&nbsp;</div>
+<button id="save" class="securemail-button" style="width: 100%">Save</button>
+
+
+
+<!-- build:js scripts/popup-vendor.js -->
+<!-- bower:js -->
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js scripts/popup.js -->
+<script src="scripts/popup.js"></script>
+<!-- endbuild -->
+</body>
 </html>

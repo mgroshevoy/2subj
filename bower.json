@@ -1,7 +1,7 @@
 {
-  "name": "2subj",
+  "name": "SecureMail for Gmail",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.8.0",
   "dependencies": {},
   "devDependencies": {
     "chai": "^3.5.0",
