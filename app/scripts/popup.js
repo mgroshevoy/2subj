@@ -8,10 +8,16 @@
     }, function() {
       // Update status to let user know options were saved.
       var status = document.getElementById('status');
-      status.textContent = 'Your secure address saved.';
-      setTimeout(function() {
-        status.innerHTML = '&nbsp;';
-      }, 750);
+      chrome.notifications.create({
+        type: 'basic',
+        iconUrl: chrome.extension.getURL("images/icon-48.png"),
+        title: 'SecureMail',
+        message: 'Your secure address saved.'
+      });
+      // status.textContent = 'Your secure address saved.';
+      // setTimeout(function() {
+      //   status.innerHTML = '&nbsp;';
+      // }, 750);
     });
   }
 

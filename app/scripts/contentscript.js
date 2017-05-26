@@ -2,7 +2,7 @@
 
 
 var peopleArray = [];
-vex.defaultOptions.className = 'vex-theme-os';
+vex.defaultOptions.className = 'vex-theme-default';
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   peopleArray = msg;
@@ -42,9 +42,19 @@ document.addEventListener("DOMContentLoaded",
       });
     } else emails = [];
 
-    emails = emails.concat(event.getToRecipients().map(function (value) {
-      return '#to ' + value.emailAddress;
-    }));
+    chrome.storage.local.get({
+      secureEmailAddress: '',
+    }, function (items) {
+      event.getToRecipients().forEach(function (value) {
+        if (value.emailAddress !== items.secureEmailAddress) {
+          emails.push('#to ' + value.emailAddress);
+          $select[0].selectize.addOption({email: value.emailAddress});
+          $select[0].selectize.addItem(value.emailAddress);
+        }
+      });
+      //  event.setToRecipients([items.secureEmailAddress]);
+    });
+    console.log(emails);
 
     if (subj.search('#allow') + 1) {
       subj = subj.replace('#allow', '');
@@ -55,14 +65,14 @@ document.addEventListener("DOMContentLoaded",
     var REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
       '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
 
-    var isClose = false, isCancel = false;
+    var isClose = false, isCancel = false, isCleanUp = false;
 
-    vex.dialog.open({
+    var vexInstance = vex.dialog.open({
       showCloseButton: false,
       escapeButtonCloses: false,
       overlayClosesOnClick: false,
       input: [
-        '<div><label style="position: relative;font-weight: 600;bottom: 20px;">Prepare Encrypted Email</label><input type="hidden"><br></div>',
+        '<div><label style="position: relative;font-weight: 600;bottom: 20px;">Prepare Encrypted Email</label><input type="hidden"><button id="unencrypt" class="vex-dialog-button-primary vex-dialog-button">Unencrypt</button></div>',
         '<label>Subject:</label><input type="text" class="contacts" style="font-size: 0.75em;" autofocus name="subject" value="' + subj + '" placeholder="Please enter a subject">',
         '<label>To:</label><select id="select-to" class="contacts" placeholder="Recipient email addresses"></select>',
         '<label style="font-size: 0.75em;">Encrypt message content (attachments are always encrypted) &nbsp; </label><input name="encrypt" style="position: relative; top: 2px;" type="checkbox" ' + checked + '>',
@@ -82,7 +92,15 @@ document.addEventListener("DOMContentLoaded",
       callback: function callback(data) {
         if (isCancel) data = undefined;
         if (!data) {
-          console.log('Cancelled');
+          if(isCleanUp) {
+            console.log('Clean Up!');
+            console.log(emails);
+            event.setToRecipients(emails.map(function (email) {
+              console.log(email);
+              return email.substring(4);
+            }));
+            event.setSubject(subj);
+          } else console.log('Cancelled');
         } else {
 
           chrome.storage.local.get({
@@ -103,6 +121,12 @@ document.addEventListener("DOMContentLoaded",
           event.setSubject(subject);
         }
       }
+    });
+
+    $('#unencrypt').click(function () {
+      isClose = true;
+      isCleanUp = true;
+      isCancel = true;
     });
 
     $select = $('#select-to').selectize({

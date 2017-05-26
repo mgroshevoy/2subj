@@ -19,27 +19,9 @@
   "permissions": [
     "identity",
     "tabs",
-    "http://*/*",
-    "https://*/*",
     "background",
-    "bookmarks",
-    "clipboardRead",
-    "clipboardWrite",
-    "contentSettings",
-    "contextMenus",
-    "cookies",
-    "*://*.google.com/",
-    "debugger",
-    "history",
-    "idle",
-    "management",
     "notifications",
-    "pageCapture",
-    "topSites",
     "storage",
-    "webNavigation",
-    "webRequest",
-    "webRequestBlocking",
     "<all_urls>"
   ],
   "options_ui": {
@@ -54,7 +36,7 @@
       ],
       "css": [
         "styles/vex.css",
-        "styles/vex-theme-os.css",
+        "styles/vex-theme-default.css",
         "styles/selectize.css",
         "styles/selectize.default.css",
         "styles/main.css"
@@ -83,8 +65,7 @@
     "scopes": ["https://www.google.com/m8/feeds"]
   },
   "web_accessible_resources": [
-    "images/icon-48.png",
-    "contextmenu.html",
-    "styles/fonts/*"
+    "styles/main.css",
+    "images/icon-48.png"
   ]
 }
