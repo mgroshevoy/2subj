@@ -1,11 +1,12 @@
 'use strict';
 
-var REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' + '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
+const REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
+  '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
 
 function save_options() {
-  var addressTo = document.getElementById('addressTo').value;
-  var isPreventSend = document.getElementById('isPreventSend').checked;
-  chrome.storage.sync.set({ isPreventSend: isPreventSend });
+  let addressTo = document.getElementById('addressTo').value;
+  let isPreventSend = document.getElementById('isPreventSend').checked;
+  chrome.storage.sync.set({isPreventSend: isPreventSend});
   if (!addressTo.match(new RegExp('^' + REGEX_EMAIL + '$', 'i'))) {
     chrome.notifications.create({
       type: 'basic',
@@ -18,7 +19,7 @@ function save_options() {
   }
   // localStorage.setItem('secureEmailAddress', addressTo);
   chrome.storage.sync.set({
-    secureEmailAddress: addressTo
+    secureEmailAddress: addressTo,
   }, function () {
     // Update status to let user know options were saved.
     //var status = document.getElementById('status');
@@ -51,4 +52,5 @@ document.getElementById('isPreventSend').addEventListener('change', function (ev
 });
 
 document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('save').addEventListener('click', save_options);
+document.getElementById('save').addEventListener('click',
+  save_options);

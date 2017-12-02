@@ -1,5 +1,4 @@
 'use strict';
-
 var contacts = null;
 var timerId;
 
@@ -8,7 +7,7 @@ chrome.runtime.onMessage.addListener(function (response, sender, sendResponse) {
   if (!contacts) {
     googleOAuthContacts.onload();
   } else {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
       chrome.tabs.sendMessage(tabs[0].id, contacts, function (response) {
         //console.log(response);
       });
@@ -25,6 +24,7 @@ timerId = setInterval(function () {
 chrome.runtime.onInstalled.addListener(function (details) {
   googleOAuthContacts.onload();
 });
+
 
 var googleOAuthContacts = function () {
 
@@ -56,7 +56,7 @@ var googleOAuthContacts = function () {
     getToken();
 
     function getToken() {
-      chrome.identity.getAuthToken({ interactive: interactive }, function (token) {
+      chrome.identity.getAuthToken({interactive: interactive}, function (token) {
         if (chrome.runtime.lastError) {
           callback(chrome.runtime.lastError);
           return;
@@ -78,12 +78,13 @@ var googleOAuthContacts = function () {
     function requestComplete() {
       if (this.status == 401 && retry) {
         retry = false;
-        chrome.identity.removeCachedAuthToken({ token: access_token }, getToken);
+        chrome.identity.removeCachedAuthToken({token: access_token}, getToken);
       } else {
         callback(null, this.status, this.response);
       }
     }
   }
+
 
   function onContacts(error, status, response) {
     var data = JSON.parse(response);
@@ -104,7 +105,7 @@ var googleOAuthContacts = function () {
         }
       }
     }
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
       chrome.tabs.sendMessage(tabs[0].id, contacts, function (response) {
         //console.log(response);
       });
@@ -112,8 +113,10 @@ var googleOAuthContacts = function () {
   }
 
   function getUserInfo(interactive) {
-    xhrWithAuth('GET', 'https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=999', interactive, onContacts);
+    xhrWithAuth('GET',
+      'https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=999', interactive, onContacts);
   }
+
 
   /**
    Retrieves a valid token.
@@ -121,7 +124,7 @@ var googleOAuthContacts = function () {
   function interactiveSignIn() {
     changeState(STATE_ACQUIRING_AUTHTOKEN);
 
-    chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+    chrome.identity.getAuthToken({'interactive': true}, function (token) {
       if (chrome.runtime.lastError) {
         sampleSupport.log(chrome.runtime.lastError);
         changeState(STATE_START);
@@ -155,3 +158,4 @@ var googleOAuthContacts = function () {
     }
   };
 }();
+

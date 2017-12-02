@@ -13,7 +13,6 @@
   <!-- endbuild -->
 </head>
 <body>
-
 <img style="margin-right: 5px; display: inline-block; margin-top: 0;" src="images/icon-38.png">
 <h3 style="display: inline-block; vertical-align:50%;">SecureMail</h3>
 
@@ -21,8 +20,10 @@
   Secure email address:
 </label>
 <input class="securemail-input" type="text" name="addressTo" id="addressTo" placeholder="Please enter an address">
-
-
+<div style="margin: 10px 0;">
+  <input id="isPreventSend" type="checkbox" name="isPreventSend">
+  <label for="isPreventSend">Warn about unsecure sending</label>
+</div>
 <!--<div id="status" style="font-size: 0.75em">&nbsp;</div>-->
 <button id="save" class="securemail-button" style="width: 100%">Save</button>
 
@@ -34,7 +35,7 @@
 <!-- endbuild -->
 
 <!-- build:js scripts/popup.js -->
-<script src="scripts/popup.js"></script>
+<script src="scripts.babel/popup.js"></script>
 <!-- endbuild -->
 </body>
 </html>
