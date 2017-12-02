@@ -27,6 +27,8 @@ function save_options() {
       iconUrl: chrome.extension.getURL('images/icon-48.png'),
       title: 'SecureMail',
       message: 'Your secure address saved.'
+    }, function () {
+      window.close();
     });
     // status.textContent = 'Your secure address saved.';
     // setTimeout(function() {
@@ -39,7 +41,7 @@ function restore_options() {
   // document.getElementById('addressTo').value = localStorage.getItem('secureEmailAddress')
   chrome.storage.sync.get(function (items) {
     console.log(items);
-    document.getElementById('addressTo').value = items.secureEmailAddress;
+    document.getElementById('addressTo').value = items.secureEmailAddress || '';
     document.getElementById('isPreventSend').checked = items.isPreventSend;
   });
 }

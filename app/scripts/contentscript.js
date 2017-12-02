@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', InboxSDK.load(2, 'sdk_securemail_c
           case 7:
             secureEmailAddress = _context.sent.secureEmailAddress;
 
-            secureDomain = secureEmailAddress.match(/@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/);
+            if (secureEmailAddress) secureDomain = secureEmailAddress.match(/@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/);
 
             composeView.on('presending', function (event) {
               if (isPreventSend === true && !isSending && !composeView.getToRecipients().find(function (item) {
@@ -167,6 +167,8 @@ document.addEventListener('DOMContentLoaded', InboxSDK.load(2, 'sdk_securemail_c
 
                             $select[0].selectize.items.forEach(function (item) {
                               var name = _.find($select[0].selectize.options, { email: item }).name;
+                              console.log(name);
+                              name = name.replace(',', '');
                               if (name === item) name = null;
                               if (item.match(/\.at\./) && item.match(secureDomain)) {
                                 arrayTo.push((name ? name + '<' : '') + item.replace(secureDomain, '').replace(/^(.*)\.at\.(.*?)$/, '$1@$2') + (name ? '>' : ''));
@@ -180,9 +182,11 @@ document.addEventListener('DOMContentLoaded', InboxSDK.load(2, 'sdk_securemail_c
                           } else console.log('Cancelled');
                         } else {
 
-                          arrayTo.push(secureEmailAddress);
+                          // arrayTo.push(secureEmailAddress);
                           $select[0].selectize.items.forEach(function (item) {
                             var name = _.find($select[0].selectize.options, { email: item }).name;
+                            name = name.replace(',', '');
+                            console.log(name);
                             if (name === item) name = undefined;
                             if (item.match(secureDomain)) {
                               arrayTo.push((name ? name + '<' : '') + item + (name ? '>' : ''));

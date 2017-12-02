@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded',
         let isPreventSend = PreventSend ? PreventSend.isPreventSend : PreventSend;
 
         secureEmailAddress = (await chromep.storage.sync.get('secureEmailAddress')).secureEmailAddress;
-        secureDomain = secureEmailAddress.match(/@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/);
+        if (secureEmailAddress) secureDomain = secureEmailAddress.match(/@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/);
 
         composeView.on('presending', event => {
           if (isPreventSend === true && !isSending && !(composeView.getToRecipients().find(item => item.emailAddress.includes('.at.') || item.emailAddress.includes(secureEmailAddress)))) {
@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded',
 
                 $select[0].selectize.items.forEach(item => {
                   let name = _.find($select[0].selectize.options, {email: item}).name;
+                  name = name.replace(',','');
                   if (name === item) name = null;
                   if (item.match(/\.at\./) && item.match(secureDomain)) {
                     arrayTo.push((name ? name + '<' : '')
@@ -149,9 +150,10 @@ document.addEventListener('DOMContentLoaded',
               } else console.log('Cancelled');
             } else {
 
-              arrayTo.push(secureEmailAddress);
+              // arrayTo.push(secureEmailAddress);
               $select[0].selectize.items.forEach(item => {
                 let name = _.find($select[0].selectize.options, {email: item}).name;
+                name = name.replace(',','');
                 if (name === item) name = undefined;
                 if (item.match(secureDomain)) {
                   arrayTo.push((name ? name + '<' : '') + item + (name ? '>' : ''));
