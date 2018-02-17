@@ -123,7 +123,7 @@ var googleOAuthContacts = function () {
 
     chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
       if (chrome.runtime.lastError) {
-        sampleSupport.log(chrome.runtime.lastError);
+        console.log(chrome.runtime.lastError);
         changeState(STATE_START);
       } else {
         var messageStr = 'Token acquired:' + token + '. See chrome://identity-internals for details.';

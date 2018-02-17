@@ -296,7 +296,7 @@ var has          = require('./_has')
   , IE_PROTO     = require('./_shared-key')('IE_PROTO');
 
 module.exports = function(object, names){
-  var O      = toIObjecttoIObject(object)
+  var O      = toIObject(object)
     , i      = 0
     , result = []
     , key;
