@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', InboxSDK.load(2, 'sdk_securemail_c
               showCloseButton: false,
               escapeButtonCloses: false,
               overlayClosesOnClick: false,
-              input: ['<div><label style="position: relative;font-weight: 600;bottom: 20px;">Prepare Encrypted Email</label><input type="hidden"><button id="unencrypt" class="vex-dialog-button-primary vex-dialog-button">Unencrypt</button></div>', '<label>Subject:</label><input type="text" class="contacts" style="font-size: 0.75em;" autofocus name="subject" value="' + subj + '" placeholder="Please enter a subject">', '<label>To:</label><select id="select-to" class="contacts" placeholder="Recipient email addresses"></select>', '<label>Cc:</label><select id="cc-to" class="contacts" placeholder="Recipient email addresses"></select>', '<label>Bcc:</label><select id="bcc-to" class="contacts" placeholder="Recipient email addresses"></select>', '<label style="font-size: 0.75em;">Encrypt message content (attachments are always encrypted) &nbsp; </label><input name="encrypt" style="position: relative; top: 2px; left: 0;" type="checkbox" ' + checked + '>'].join(''),
+              input: ['<div><label style="position: relative;font-weight: 600;bottom: 20px;">Prepare Encrypted Email</label><input type="hidden"><button id="unencrypt" class="vex-dialog-button-primary vex-dialog-button">Unencrypt</button></div>', '<label>Subject:</label><input type="text" class="contacts" style="font-size: 0.75em;" autofocus name="subject" value="' + subj + '" placeholder="Please enter a subject">', '<div style="width: 100%;"><div style="display:inline-block; width: 50%;">To:</div><div style="display:inline-block; text-align: right; width: 50%;"><a id="cc-toggle" style="margin-right: 5px;" href="#">Cc </a><a id="bcc-toggle" href="#">Bcc </a></div></div><select id="select-to" class="contacts" placeholder="Recipient email addresses"></select>', '<div id="cc"><label>Cc:</label><select id="cc-to" class="contacts" placeholder="Recipient email addresses"></select></div>', '<div id="bcc"><label>Bcc:</label><select id="bcc-to" class="contacts" placeholder="Recipient email addresses"></select></div>', '<label style="font-size: 0.75em;">Encrypt message content (attachments are always encrypted) &nbsp; </label><input name="encrypt" style="position: relative; top: 2px; left: 0;" type="checkbox" ' + checked + '>'].join(''),
               buttons: [$.extend({}, vex.dialog.buttons.YES, {
                 text: 'OK', click: function click(event) {
                   isClose = true;
@@ -439,28 +439,43 @@ document.addEventListener('DOMContentLoaded', InboxSDK.load(2, 'sdk_securemail_c
               }
             });
 
-            event.getCcRecipients().forEach(function (value) {
-              console.log(value);
-              if (value.emailAddress !== secureEmailAddress) {
-                //emails.push('#to ' + value.emailAddress);
-                $selectcc[0].selectize.addOption({
-                  name: value.name,
-                  email: value.emailAddress
-                });
-                $selectcc[0].selectize.addItem(value.emailAddress);
-              }
-            });
+            if (event.getCcRecipients().length) {
+              event.getCcRecipients().forEach(function (value) {
+                console.log(value);
+                if (value.emailAddress !== secureEmailAddress) {
+                  //emails.push('#to ' + value.emailAddress);
+                  $selectcc[0].selectize.addOption({
+                    name: value.name,
+                    email: value.emailAddress
+                  });
+                  $selectcc[0].selectize.addItem(value.emailAddress);
+                }
+              });
+            } else {
+              $('#cc').toggle();
+            }
 
-            event.getBccRecipients().forEach(function (value) {
-              console.log(value);
-              if (value.emailAddress !== secureEmailAddress) {
-                //emails.push('#to ' + value.emailAddress);
-                $selectbcc[0].selectize.addOption({
-                  name: value.name,
-                  email: value.emailAddress
-                });
-                $selectbcc[0].selectize.addItem(value.emailAddress);
-              }
+            if (event.getBccRecipients().length) {
+              event.getBccRecipients().forEach(function (value) {
+                console.log(value);
+                if (value.emailAddress !== secureEmailAddress) {
+                  //emails.push('#to ' + value.emailAddress);
+                  $selectbcc[0].selectize.addOption({
+                    name: value.name,
+                    email: value.emailAddress
+                  });
+                  $selectbcc[0].selectize.addItem(value.emailAddress);
+                }
+              });
+            } else {
+              $('#bcc').toggle();
+            }
+
+            $('#cc-toggle').on('click', function () {
+              return $('#cc').toggle();
+            });
+            $('#bcc-toggle').on('click', function () {
+              return $('#bcc').toggle();
             });
 
             // if (emails) {
@@ -470,7 +485,7 @@ document.addEventListener('DOMContentLoaded', InboxSDK.load(2, 'sdk_securemail_c
             //   });
             // }
 
-          case 21:
+          case 23:
           case 'end':
             return _context3.stop();
         }

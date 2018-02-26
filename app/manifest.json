@@ -1,7 +1,7 @@
 {
   "name": "__MSG_appName__",
   "short_name": "__MSG_shortAppName__",
-  "version": "4.4.0",
+  "version": "4.5.0",
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4s3B2CTjUerYwPB6mehTV1seXhANDi+UzQOroiERD6+fAKWVdHn9bMpJNh7GIF47b8Y3fdJCQ8/b1qP5n2ABWR8FLW5eT7NiCFSB/cNfBz2mPIyF9usv7B4EzosRPFaH25I/SQZgLh603Sv7ymedGDj87WbydYciG/PYV1C5Ji6RPIOD5uEkuzQta0cpaXIT29dGZ92FuBArQ5m5pU3EZKYALlXEY4HTP/wAD7lYK31iiASZ+E6ScDRztzyOyNOALeyJwC/63MJVe6PGjgiigCH0tJsMZzFBoad1HweYNTl0VhjfcxQtkvVI3qAod/xc3UIa396aA8/90XkvuQZTvwIDAQAB",
@@ -64,7 +64,7 @@
     "default_popup": "popup.html"
   },
   "oauth2": {
-    "client_id": "4172905106-cjfvnri5090q1a99jd73iqgk0udd8ukl.apps.googleusercontent.com",
+    "client_id": "4172905106-2d0f6sm1p2iqti2b5vc8fg39vbfi5es5.apps.googleusercontent.com",
     "scopes": ["https://www.google.com/m8/feeds"]
   },
   "web_accessible_resources": [

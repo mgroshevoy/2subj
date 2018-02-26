@@ -6,7 +6,7 @@ function save_options() {
   var addressTo = document.getElementById('addressTo').value;
   var isPreventSend = document.getElementById('isPreventSend').checked;
   chrome.storage.sync.set({ isPreventSend: isPreventSend });
-  if (!addressTo.match(new RegExp('^' + REGEX_EMAIL + '$', 'i'))) {
+  if (!addressTo.match(new RegExp('^' + REGEX_EMAIL + '$', 'i')) || !addressTo.includes('.secure-comm.com') && !addressTo.includes('.stayprivate.com')) {
     chrome.notifications.create({
       type: 'basic',
       iconUrl: chrome.extension.getURL('images/icon-48.png'),
@@ -16,6 +16,7 @@ function save_options() {
     document.getElementById('addressTo').value = '';
     return;
   }
+
   // localStorage.setItem('secureEmailAddress', addressTo);
   chrome.storage.sync.set({
     secureEmailAddress: addressTo
